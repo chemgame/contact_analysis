@@ -1,29 +1,51 @@
 # contact_analysis
 ```
-usage: contact_analysis.py [-h] -f  -s  -s1  -s2  [-b] [-e] [-on] [-off] [-o] [-d] [-dm] [-cm] [-bp] [-x] [-y]
+usage: contact_analysis.py [-h] -s  -f  [-o] [-d] [-dm] [-cm] [-bp] [-dd] [-tm] [-ev] -s1  -s2  [-x] [-y] [-cmd] [-cmc] [-b] [-e] [-st] [-dt] [-on] [-off] [-md] [-gf] [-g]
 
-         This code analyzes the contact between two selected groups of atoms and outputs the following:
-         - PDB file including both selections and contact probability as B-factor in selection-1
-         - DAT file containing sorted contact probilites of each atom
-         - JPG plots: Distance map, contact map, bar plot for residue-wise contact probabilities
+Analyze contacts between two atom groups (heavy atoms only) with hysteresis; outputs PDB, DAT, maps, bar plot; optional event windows.
 
 options:
   -h, --help            show this help message and exit
-  -f , --trajectory     Trajectory file (XTC, TRR, DCD, etc.)
-  -s , --topology       Topology file (TPR, GRO, PDB, PSF, etc.)
-  -s1 , --selection1    Group-1 (MDAnalysis string)
-  -s2 , --selection2    Group-2 (MDAnalysis string)
-  -b , --begin          Frame index to begin calculation (default: 0)
-  -e , --end            Frame index to end calculation (default: last frame)
-  -on , --on_thresh     On threshold in Angstroms for hysteresis scheme (default: 3.5 Å)
-  -off , --off_thresh   Off threshold in Angstroms for hysteresis scheme (default: 6.0 Å)
-  -o , --output         Output PDB file name (default: contact.pdb)
-  -d , --datfile        Output DAT file name (default: contact.dat)
-  -dm , --distmap       Output distance map file name (default: distance_map.jpg)
-  -cm , --contmap       Output contact probability map file name (default: contact_map.jpg)
-  -bp , --barplot       Contact probability bar plot file name (default: contact_bar.jpg)
-  -x , --xlabel         X-axis label for distance/contact map (selection-2)
-  -y , --ylabel         Y-axis label for distance/contact map (selection-1)
 
-Copyright reserved by Saumyak Mukherjee
+Inputs:
+  -s , --topology       Topology file (str, required)
+  -f , --trajectory     Trajectory file (str, required)
+
+Outputs:
+  -o , --output         Output PDB (str, default=contact.pdb)
+  -d , --datfile        Residue probabilities DAT (str, default=contact.dat)
+  -dm , --distmap       Distance map JPG (str, default=distance_map.jpg)
+  -cm , --contmap       Contact map JPG (str, default=contact_map.jpg)
+  -bp , --barplot       Residue bar plot JPG (str, default=contact_bar.jpg)
+  -dd , --distdat       Distance traces DAT (str, default=dist_traces.dat)
+  -tm, --trace_true_min
+                        Distance traces use true minima via large-cap neighbor search (bool, default=False)
+  -ev , --events        Bound windows output DAT (str, default=None=skip)
+
+Selections:
+  -s1 , --selection1    Group-1 selection (str, required)
+  -s2 , --selection2    Group-2 selection (str, required)
+
+Plotting:
+  -x , --xlabel         X label (str, default=Residue index (group2))
+  -y , --ylabel         Y label (str, default=Residue index (group1))
+  -cmd , --cmap_dist    Colormap for distance map (str, default=magma)
+  -cmc , --cmap_cont    Colormap for contact map (str, default=viridis)
+
+Time frames:
+  -b , --begin          Begin frame index (int, default=0)
+  -e , --end            End frame index (int, default=None=last)
+  -st , --stride        Use every k-th frame (int, default=1)
+  -dt , --dt_ps         Time step in ps if missing (float, default=None)
+
+Contact thresholds:
+  -on , --on_thresh     ON threshold in Å (float, default=3.5)
+  -off , --off_thresh   OFF threshold in Å (float, default=6.0)
+
+Event windows:
+  -md , --min_dur       Min bound duration in ps (float, default=50.0)
+  -gf , --gap_fill      Merge gaps ≤ this (ps) (float, default=20.0)
+
+Logging:
+  -g , --log            Logfile (str, default=contact.log)
 ```
